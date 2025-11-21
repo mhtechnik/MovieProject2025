@@ -9,10 +9,10 @@ import requests
 
 from storage import movie_storage_sql as storage
 
-# Aktiver User (dict mit 'id' und 'name')
+
 current_user = None
 
-# OMDb API key aus Umgebungsvariable
+
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 
 
@@ -34,7 +34,7 @@ def print_menu():
     print("10. Switch user")
 
 
-# ---------- User Auswahl ----------
+
 
 def choose_user():
     """Zeige Userliste, lass Auswahl zu oder erstelle neuen User.
@@ -56,7 +56,7 @@ def choose_user():
                 continue
             return storage.get_or_create_user(name)
 
-        # vorhandene User anzeigen
+        
         for idx, user in enumerate(users, start=1):
             print(f"{idx}. {user['name']}")
         print(f"{len(users) + 1}. Create new user")
@@ -81,7 +81,7 @@ def choose_user():
             print("Invalid choice. Try again.")
 
 
-# ---------- OMDb Hilfsfunktionen ----------
+
 
 def fetch_movie_from_omdb(title):
     """Fetch movie information from OMDb by title."""
@@ -136,7 +136,7 @@ def parse_omdb_result(data):
     return title, year, rating, poster_url
 
 
-# ---------- Kommandos ----------
+
 
 def command_list_movies():
     """Retrieve and display all movies from the database for current user."""
@@ -299,7 +299,7 @@ def command_generate_website():
     base_dir = Path(__file__).resolve().parent
     template_path = base_dir / "static" / "index_template.html"
 
-    # Dateiname auf User anpassen, z. B. Sara.html
+    
     safe_name = sanitize_filename(current_user["name"])
     output_path = base_dir / "static" / f"{safe_name}.html"
 
@@ -338,12 +338,12 @@ def command_generate_website():
     print(f"Website for {current_user['name']} was generated successfully: {output_path.name}")
 
 
-# ---------- Main Loop ----------
+
 
 def main():
     global current_user
 
-    # Beim Start User auswählen
+    
     current_user = choose_user()
     print(f"\nWelcome, {current_user['name']}")
 
@@ -357,7 +357,7 @@ def main():
         "7": command_search_movie,
         "8": command_movies_sorted,
         "9": command_generate_website,
-        "10": None,  # Switch user
+        "10": None,  
     }
 
     while True:
@@ -373,7 +373,7 @@ def main():
             break
 
         if choice == "10":
-            # User wechseln
+           
             current_user = None
             continue
 

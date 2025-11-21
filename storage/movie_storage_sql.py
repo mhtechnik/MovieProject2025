@@ -10,14 +10,14 @@ from pathlib import Path
 
 from sqlalchemy import create_engine, text
 
-# Basisverzeichnis = Projektroot (eine Ebene über storage/)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Pfad zur Datenbank im data Ordner
+
 DB_PATH = BASE_DIR / "data" / "movies.db"
 DB_URL = f"sqlite:///{DB_PATH}"
 
-# Engine erzeugen
+
 engine = create_engine(DB_URL, echo=False)
 
 
@@ -33,7 +33,7 @@ def init_db(drop_existing: bool = False) -> None:
             connection.execute(text("DROP TABLE IF EXISTS movies"))
             connection.execute(text("DROP TABLE IF EXISTS users"))
 
-        # Users Tabelle
+        
         connection.execute(
             text(
                 """
@@ -45,7 +45,7 @@ def init_db(drop_existing: bool = False) -> None:
             )
         )
 
-        # Movies Tabelle mit user_id
+        
         connection.execute(
             text(
                 """
@@ -64,11 +64,11 @@ def init_db(drop_existing: bool = False) -> None:
         )
 
 
-# Beim Import einmal sicherstellen, dass Tabellen existieren
+
 init_db(drop_existing=False)
 
 
-# ---------- User Funktionen ----------
+
 
 def list_users():
     """Liefert alle User als Liste von Dicts: [{'id': 1, 'name': 'John'}, ...]."""
@@ -105,7 +105,7 @@ def get_or_create_user(name: str):
         raise ValueError("User name cannot be empty")
 
     with engine.begin() as connection:
-        # Existiert der User schon?
+        
         result = connection.execute(
             text("SELECT id, name FROM users WHERE name = :name"),
             {"name": cleaned},
@@ -115,7 +115,7 @@ def get_or_create_user(name: str):
         if row:
             return {"id": row[0], "name": row[1]}
 
-        # Neu anlegen
+        
         connection.execute(
             text("INSERT INTO users (name) VALUES (:name)"),
             {"name": cleaned},
@@ -130,7 +130,7 @@ def get_or_create_user(name: str):
     return {"id": row[0], "name": row[1]}
 
 
-# ---------- Movie Funktionen ----------
+
 
 def list_movies(user_id: int):
     """Retrieve all movies from the database for one user.
